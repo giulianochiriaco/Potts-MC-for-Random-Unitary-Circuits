@@ -3,7 +3,10 @@ import numpy as np
 import random
 from itertools import * 
 
+### The following are function from the more_itertools package which may not be installed on your cluster ###
+
 def permutation_index(element, iterable):
+    """Given a permutation element and an iterable sequence (e.g. the range of the first Q integers) returns the index of that permutation in the standard itertools mapping."""
     index = 0
     pool = list(iterable)
     for i, x in zip(range(len(pool), -1, -1), element):
@@ -13,6 +16,7 @@ def permutation_index(element, iterable):
     return index
 
 def nth_permutation(iterable, r, index):
+    """Given an iterable sequence iterable, a range r and an index the permutation of iterable associated to that index in the standard itertools mapping."""
     pool = list(iterable)
     n = len(pool)
     if r is None or r == n:
@@ -43,11 +47,11 @@ def perm_mult(g1,g2):
     return gv[np.array(g2[:])]
 
 def perm_inv(g1):
-    "constructs the inverse of a permutations g1"
+    """constructs the inverse of a permutations g1"""
     return np.array([np.where(np.array(g1)==i)[0][0] for i in range(len(g1))])
 
 def Coupling_matr(Q,p,d,tol=1e-16):
-    "Constructs coupling matrix in the limit of large d for arbitrary Q and p"
+    """Constructs coupling matrix in the limit of large d for arbitrary Q and p"""
     q=factorial(Q)
     Perm_m = np.array([[perm_mult(perm_inv(nth_permutation(range(Q),Q,j)),nth_permutation(range(Q),Q,i)) for j in range(q)] for i in range(q)])
     AA=np.zeros((q,q))
@@ -61,6 +65,8 @@ def Coupling_matr(Q,p,d,tol=1e-16):
         return np.array([[max(pr,tol)+np.identity(q)*(1-pr)+(1-pr)*AA/d for pr in row] for row in p])
     
 def gx(n,m):
+    """Permutation associated to the calculation of the n-th Renyi entropy in a Q=n*m+1 replica space.
+    The permutation is given by m copies of the cyclic permutation (2,3,...,n,1), with the Q-th element left untouched."""
     out = []
     Q=n*m+1
     for x in range(m):
@@ -69,14 +75,13 @@ def gx(n,m):
     out.append(n*m)
     return np.uint8(permutation_index(np.array(out),range(Q)))
 
-#@nb.njit()
 def boundary(Lx,lA,g):
+    """Construction of boundary with the permutation gx on the central lA sites and identity (0) on the remaining Lx-lA"""
     out = np.zeros(Lx,dtype=np.uint8)
     lL = int((Lx-lA)/2)
     out[lL:lL+lA] = g
     return out
 
-#@nb.njit()
 def next_neighbors(ix,iy,Lx,Ly):
     if iy==0:
         out = [[(ix-1)%Lx,iy+1],[ix,iy+1]]
