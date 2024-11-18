@@ -83,6 +83,10 @@ def boundary(Lx,lA,g):
     return out
 
 def next_neighbors(ix,iy,Lx,Ly):
+    """Returns a list with the indices of the neighboring sites of (ix,iy) on a Lx x Ly lattice.
+    The geometry of the coupling is a K-shape: each site couples to the ones directly above and below
+    in the y direction and to the two sites above and below and to the right (for sites with odd iy)
+    or to the left (for sites with even iy)"""
     if iy==0:
         out = [[(ix-1)%Lx,iy+1],[ix,iy+1]]
     elif iy%2==0:
