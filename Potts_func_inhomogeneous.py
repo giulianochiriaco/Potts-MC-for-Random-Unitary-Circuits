@@ -98,7 +98,6 @@ def next_neighbors(ix,iy,Lx,Ly):
             out = [[(ix+1)%Lx,iy+1],[ix,iy+1],[(ix+1)%Lx,iy-1],[ix,iy-1]]
     return out
 
-#@nb.njit()
 def cycles(q):
     """Creates a random operator acting on the space {1,...q} of order 2.
     I.e. it is a permutation from Sq made of only transpositions.
@@ -216,6 +215,7 @@ def Montecarlo(Lx,Ly,spin,q,coupling,Nstep,boundary=None,Ntherm=10000,prnt=0,Nin
     prnt = option to print out the spin configuration at each step
     Ninterval = number of steps between each energy storage
     config = option to also return the spin configuration (useful to stop and resume calculations without having to thermalize again)"""
+    
     EBu_out = [] #array to store the boundary energy of the system
     ECo_out = [] #array to store the bulk energy of the system
     counter = 0
